@@ -22,7 +22,7 @@ The goal is to have a single script that can take in a base LLM and put it into 
 Initialize Oxen.ai data repository and the folder for M0.
 
 ```bash
-mkdir -p data/MO
+mkdir -p data/MO/train
 cd data
 oxen init
 oxen config --set-remote origin https://hub.oxen.ai/$USERNAME/$REPOSITORY
@@ -32,7 +32,8 @@ cd ..
 Download the initial dataset
 
 ```
-oxen download datasets/Self-Rewarding-Language-Models M0/train/ift+eft.jsonl
+oxen download datasets/Self-Rewarding-Language-Models M0/train/ift+eft.jsonl -o data/MO/train
+oxen download datasets/Self-Rewarding-Language-Models M0/train/ift.jsonl -o data/MO/train
 ```
 
 ## ⚽️ Kick it off

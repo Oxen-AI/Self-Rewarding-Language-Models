@@ -1,3 +1,4 @@
+#!/bin/bash
 
 CODE=$1
 BASE_MODEL=$2
