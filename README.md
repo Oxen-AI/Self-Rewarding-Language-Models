@@ -1,12 +1,14 @@
 # 🐂 Oxen.ai Self-Rewarding Language Models 🔁
 
-This is work done by the [Oxen.ai Community](https://oxen.ai/community), trying to reproduce the [Self-Rewarding Language Model](https://arxiv.org/abs/2401.10020) paper from MetaAI.
+This is work done by the [Oxen.ai Community](https://oxen.ai/community), trying to reproduce the [Self-Rewarding Language Model paper](https://arxiv.org/abs/2401.10020) from MetaAI. Every Friday we get together for a paper club called [Arxiv Dives](https://www.oxen.ai/community/arxiv-dives) where we read interesting research papers. We thought the Self-Rewarding Language Models paper felt very approachable and reproducable, so we spent some time implementing it.
 
 <img src="./images/SRLM.png" width="512px"></img>
 
+If you want to learn more about Self-Rewarding Language Models you can find our deep dive on it [here](https://www.oxen.ai/blog/arxiv-dives-self-rewarding-language-models).
+
 ## 🤖 Goal
 
-The goal is to have a single script that can take in a base LLM and put it into a Self-Reward loop.
+The goal is to have a single script that can take in a base LLM and put it into a Self-Reward loop. The initial experiments were run with `mistralai/Mistral-7B-v0.1` as the base model, but in theory could be run with any model.
 
 ```bash
 ./self-reward.sh scripts mistralai/Mistral-7B-v0.1 M0
@@ -27,7 +29,9 @@ There are 5 main steps in each iteration of the Self-Rewarding loop.
 
 ## 🐂 Setup Oxen.ai
 
-We will be using [Oxen.ai](https://oxen.ai) to version the intermediate models and datasets that are generated throughout the process. If you are not familiar with Oxen.ai, it is an open source, blazing fast, version control system that is built from the ground up to handle large model files, large datasets, and large sets of multi-modal data that is a pain to version in git or git-lfs.
+We use [Oxen.ai](https://oxen.ai) to version the intermediate models and datasets that are generated throughout the process.
+
+If you are not familiar with Oxen.ai, it is an open source, blazing fast, version control system that is built from the ground up to handle large model files, large datasets, and large sets of multi-modal data that is a pain to version in git or git-lfs.
 
 Feel free to checkout our [GitHub project](https://github.com/Oxen-AI/oxen-release) to learn more.
 
