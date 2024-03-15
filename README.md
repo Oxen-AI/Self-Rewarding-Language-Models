@@ -15,7 +15,7 @@ The goal is to have a single script that can take in a base LLM and put it into 
 2) [02_gen_prompts.py](scripts/02_gen_responses.py) - Generate N Responses per prompt, so that we can create preference pairs.
 3) [03_gen_scores.py](scripts/03_gen_scores.py) - Score each response from 1-5 for how well it answered the prompt.
 4) [04_gen_preferences.py](scripts/04_gen_preferences.py) - Generate preference pairs given the scores to create a DPO dataset
-5) [05_dpo.py] - Run Direct Preference Optimization (DPO) to train the next iteration of the model
+5) [05_dpo.py](scripts/05_dpo.py) - Run Direct Preference Optimization (DPO) to train the next iteration of the model
 
 ## 💾 Setup Data Pipeline
 
