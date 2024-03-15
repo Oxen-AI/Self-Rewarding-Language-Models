@@ -41,7 +41,7 @@ oxen download datasets/Self-Rewarding-Language-Models M0/train/ift.jsonl -o data
 Run the self-reward.sh script to generate the first end to end model
 
 ```bash
-./self-reward.sh scripts mistralai/Mistral-7B-v0.1 data/M0
+./self-reward.sh scripts mistralai/Mistral-7B-v0.1 M0
 ```
 
 TODO: Put this in a loop for M0, M1, M2, etc...
