@@ -1,14 +1,14 @@
-# Self-Rewarding Language Models
+# 🐂 Oxen.ai Self-Rewarding Language Models 🔁
 
 This is work done by the [Oxen.ai](https://oxen.ai/community) Community, trying to reproduce the [Self-Rewarding Language Model](https://arxiv.org/abs/2401.10020) paper from MetaAI.
 
 <img src="./images/SRLM.png" width="512px"></img>
 
-## 🤖 Goal 🔁
+## 🤖 Goal
 
 The goal is to have a single script that can take in a base LLM and put it into a Self-Reward loop.
 
-## Steps
+## 🏃‍➡️ Steps
 
 0) [00_sft.py](scripts/00_sft.py) - Supervised Fine-Tuning (SFT) of a base model to give it instruction following and evaluation skills.
 1) [01_gen_prompts.py](scripts/01_gen_prompts.py) - Generate new prompts to add to the training set.
@@ -17,7 +17,7 @@ The goal is to have a single script that can take in a base LLM and put it into 
 4) [04_gen_preferences.py](scripts/04_gen_preferences.py) - Generate preference pairs given the scores to create a DPO dataset
 5) [05_dpo.py] - Run Direct Preference Optimization (DPO) to train the next iteration of the model
 
-## Setup Data Pipeline
+## 💾 Setup Data Pipeline
 
 Initialize Oxen.ai data repository and the folder for M0.
 
@@ -35,7 +35,7 @@ Download the initial dataset
 oxen download datasets/Self-Rewarding-Language-Models M0/train/ift+eft.jsonl
 ```
 
-## Kick it off
+## ⚽️ Kick it off
 
 Run the self-reward.sh script to generate the first end to end model
 
