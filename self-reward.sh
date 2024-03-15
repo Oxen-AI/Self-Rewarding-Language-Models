@@ -6,14 +6,14 @@ MODEL_NAME=$3
 
 DATA_DIR=data
 
-export PYTHONPATH=./src
+export PYTHONPATH=src
 
 # Train the instruction following and evaluation skills
 python $CODE/00_sft.py -d $DATA_DIR/$MODEL_NAME/train/ift+eft.jsonl -m $BASE_MODEL -o $DATA_DIR/$MODEL_NAME/models/sft
 
 # Upload model to oxen
 cd $DATA_DIR
-oxen add $MODEL_NAME/models/sft
+oxen add $MODEL_NAME/models/sft/final_checkpoint
 oxen commit -m "adding model $MODEL_NAME"
 oxen push origin main
 cd ..

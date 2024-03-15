@@ -4,12 +4,12 @@
 import torch
 import pandas as pd
 from transformers import TextStreamer
-import os, sys
+import sys
 import uuid
 
 from srlm.model import load_model
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 4:
     print("Usage: python 01_gen_prompts.py <model_name> <train.jsonl> <prompts.jsonl>")
     exit()
 
