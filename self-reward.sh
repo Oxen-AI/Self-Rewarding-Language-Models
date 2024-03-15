@@ -16,7 +16,10 @@ oxen push origin main
 
 # Generate new prompts from a base LM and original ift data
 # This is hard coded to mistralai/Mistral-7B-v0.1 for now, but could be any base LLM
-mkdir $DATA/generated
+
+if [[ ! -e $DATA/generated ]]; then
+    mkdir $DATA/generated
+fi
 python $CODE/01_gen_prompts.py mistralai/Mistral-7B-v0.1 $DATA/train/ift.jsonl $DATA/generated/prompts.jsonl
 
 # Upload prompts to oxen

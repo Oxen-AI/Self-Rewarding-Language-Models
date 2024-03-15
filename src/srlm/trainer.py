@@ -26,7 +26,7 @@ class Trainer:
             gradient_accumulation_steps=4,
             warmup_steps=30,
             logging_steps=1,
-            num_train_epochs=2,
+            num_train_epochs=1,
             save_steps=50
         )
 
