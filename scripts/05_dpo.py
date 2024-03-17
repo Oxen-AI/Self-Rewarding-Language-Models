@@ -12,14 +12,15 @@ from trl import DPOTrainer
 
 import sys, os
 
-if len(sys.argv) != 4:
-    print("Usage: python dpo.py <model_name> <dataset.json> <results_dir>")
+if len(sys.argv) != 5:
+    print("Usage: python dpo.py <base_model_name> <model_name> <dataset.json> <results_dir>")
     exit()
 
-model_name = sys.argv[1]
+base_model_name = sys.argv[1]
+model_name = sys.argv[2]
 # use $MODEL/generated/preferences.jsonl for the dataset
-dataset_file = sys.argv[2]
-output_dir = sys.argv[3]
+dataset_file = sys.argv[3]
+output_dir = sys.argv[4]
 
 # load the training dataset
 dataset = load_dataset("json", data_files={'train': dataset_file})

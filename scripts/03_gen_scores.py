@@ -8,13 +8,14 @@ import os
 import sys
 
 # python scripts/gen_scores.py M0/models/sft M0/generated/responses.jsonl M0/generated/scores.jsonl
-if len(sys.argv) != 4:
-    print("Usage: python 03_gen_scores.py <model_name> <responses_file> <scores_file>")
+if len(sys.argv) != 5:
+    print("Usage: python 03_gen_scores.py <base_model_name> <model_name> <responses_file> <scores_file>")
     exit()
 
-model_name = sys.argv[1]
-responses_file = sys.argv[2]
-scores_file = sys.argv[3]
+base_model_name = sys.argv[1]
+model_name = sys.argv[2]
+responses_file = sys.argv[3]
+scores_file = sys.argv[4]
 
 device = "cuda" # the device to load the model onto
 
@@ -37,7 +38,7 @@ def load_fined_tuned():
     )
 
     tokenizer = AutoTokenizer.from_pretrained(
-        model_name,
+        base_model_name,
         device_map="auto",
     )
 
