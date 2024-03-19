@@ -45,7 +45,7 @@ oxen push origin main
 cd ..
 
 # Generate responses for the prompts
-python $CODE/03_gen_scores.py $BASE_MODEL $DATA_DIR/$MODEL_NAME/models/sft/final_checkpoint $DATA_DIR/$MODEL_NAME/generated/responses.jsonl $DATA_DIR/$MODEL_NAME/generated/scores.jsonl
+python $CODE/03_gen_scores.py $TOKENIZER_MODEL $DATA_DIR/$MODEL_NAME/models/sft/final_checkpoint $DATA_DIR/$MODEL_NAME/generated/responses.jsonl $DATA_DIR/$MODEL_NAME/generated/scores.jsonl
 
 # Upload scores to oxen
 cd $DATA_DIR
@@ -65,7 +65,7 @@ oxen push origin main
 cd ..
 
 # Train DPO model
-python $CODE/05_dpo.py $BASE_MODEL $DATA_DIR/$MODEL_NAME/models/sft/final_checkpoint $DATA_DIR/$MODEL_NAME/generated/preferences.jsonl $DATA_DIR/$MODEL_NAME/models/dpo/
+python $CODE/05_dpo.py $TOKENIZER_MODEL $DATA_DIR/$MODEL_NAME/models/sft/final_checkpoint $DATA_DIR/$MODEL_NAME/generated/preferences.jsonl $DATA_DIR/$MODEL_NAME/models/dpo/
 
 # Upload DPO Model
 cd $DATA_DIR
