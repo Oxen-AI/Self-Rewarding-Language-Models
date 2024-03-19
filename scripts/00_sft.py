@@ -17,7 +17,8 @@ def collate_fn(tokenizer, x):
 def main():
     parser = argparse.ArgumentParser(description='SFT train a model.')
     parser.add_argument('-d', '--dataset', required=True, type=str, help='input sft dataset')
-    parser.add_argument('-m', '--base_model', default="mistralai/Mistral-7B-v0.1", type=str, help='the base model we want to fine-tune')
+    parser.add_argument('-b', '--base_model', default="mistralai/Mistral-7B-v0.1", type=str, help='the base model we want to fine-tune')
+    parser.add_argument('-m', '--model', default="mistralai/Mistral-7B-v0.1", type=str, help='the base model we want to fine-tune')
     parser.add_argument('-o', '--output', required=True, type=str, help='output trained model')
     args = parser.parse_args()
 
@@ -30,7 +31,7 @@ def main():
     dataset = dataset['train'].shuffle(seed=42)
 
     # load the model
-    model, tokenizer = load_model(args.base_model)
+    model, tokenizer = load_model(args.base_model, args.model)
     dataset = dataset.map(lambda x: collate_fn(tokenizer, x))
 
     print("First example in the dataset")

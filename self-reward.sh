@@ -7,9 +7,10 @@ MODEL_NAME=$3
 DATA_DIR=data
 
 export PYTHONPATH=src
+export TOKENIZER_MODEL=mistralai/Mistral-7B-v0.1
 
 # Train the instruction following and evaluation skills
-python $CODE/00_sft.py -d $DATA_DIR/$MODEL_NAME/train/ift+eft.jsonl -m $BASE_MODEL -o $DATA_DIR/$MODEL_NAME/models/sft
+python $CODE/00_sft.py -d $DATA_DIR/$MODEL_NAME/train/ift_eft.jsonl -b $TOKENIZER_MODEL -m $BASE_MODEL -o $DATA_DIR/$MODEL_NAME/models/sft
 
 # Upload model to oxen
 cd $DATA_DIR
@@ -24,7 +25,7 @@ cd ..
 if [[ ! -e $DATA_DIR/$MODEL_NAME/generated ]]; then
     mkdir $DATA_DIR/$MODEL_NAME/generated
 fi
-python $CODE/01_gen_prompts.py mistralai/Mistral-7B-v0.1 $DATA_DIR/$MODEL_NAME/train/ift.jsonl $DATA_DIR/$MODEL_NAME/generated/prompts.jsonl
+python $CODE/01_gen_prompts.py $TOKENIZER_MODEL $DATA_DIR/$MODEL_NAME/models/sft/final_checkpoint $DATA_DIR/$MODEL_NAME/train/ift.jsonl $DATA_DIR/$MODEL_NAME/generated/prompts.jsonl
 
 # Upload prompts to oxen
 cd $DATA_DIR
@@ -72,3 +73,8 @@ oxen add $MODEL_NAME/models/dpo
 oxen commit -m "adding DPO model for $MODEL_NAME"
 oxen push origin main
 cd ..
+
+# Filter down and concatenate to own training data
+oxen df $DATA_DIR/$MODEL_NAME/generated/scores.jsonl --filter "score > 4" -c 'prompt_id,prompt,completion,source' -o $DATA_DIR/$MODEL_NAME/generated/new_ift.jsonl --add-col 'source:generated-ift:str'
+oxen df $DATA_DIR/$MODEL_NAME/train/ift_eft.jsonl --vstack $DATA_DIR/$MODEL_NAME/generated/new_ift.jsonl -o $DATA_DIR/$MODEL_NAME/generated/ift_eft.jsonl
+oxen df $DATA_DIR/$MODEL_NAME/train/ift_eft.jsonl --filter 'source == ift || source == generated-ift' -o $DATA_DIR/$MODEL_NAME/train/ift.jsonl

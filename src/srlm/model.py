@@ -16,8 +16,12 @@ def get_bnb_config():
 
     return bnb_config
 
-def load_model(model_name):
+def load_model(tokenizer_name, model_name):
     bnb_config = get_bnb_config()
+
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, trust_remote_code=True)
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "right"
 
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -25,10 +29,6 @@ def load_model(model_name):
         quantization_config=bnb_config,
     )
     model.config.pretraining_tp = 1
-
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
 
     return model, tokenizer
 

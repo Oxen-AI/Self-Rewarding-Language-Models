@@ -9,13 +9,14 @@ import uuid
 
 from srlm.model import load_model
 
-if len(sys.argv) != 4:
-    print("Usage: python 01_gen_prompts.py <model_name> <train.jsonl> <prompts.jsonl>")
+if len(sys.argv) != 5:
+    print("Usage: python 01_gen_prompts.py <tokenizer_name> <model_name> <train.jsonl> <prompts.jsonl>")
     exit()
 
-model_name = sys.argv[1]
-ift_dataset_file = sys.argv[2]
-generated_prompts_file = sys.argv[3]
+base_name = sys.argv[1]
+model_name = sys.argv[2]
+ift_dataset_file = sys.argv[3]
+generated_prompts_file = sys.argv[4]
 
 device = "cuda" # the device to load the model onto
 
@@ -98,7 +99,7 @@ def extract_prompts(answer):
     print(prompts)
     return prompts
 
-model, tokenizer = load_model(model_name)
+model, tokenizer = load_model(base_name, model_name)
 
 ift_df = read_jsonl_file(ift_dataset_file)
 uniq_prompts = set([])

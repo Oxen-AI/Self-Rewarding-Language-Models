@@ -71,7 +71,7 @@ Download the initial datasets from our [datasets/Self-Rewarding-Language-Models]
 
 ```bash
 mkdir -p M0/train
-oxen download datasets/Self-Rewarding-Language-Models M0/train/ift+eft.jsonl -o M0/train
+oxen download datasets/Self-Rewarding-Language-Models M0/train/ift_eft.jsonl -o M0/train
 oxen download datasets/Self-Rewarding-Language-Models M0/train/ift.jsonl -o M0/train
 ```
 
