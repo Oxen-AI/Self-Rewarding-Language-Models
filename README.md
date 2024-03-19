@@ -24,7 +24,7 @@ There are 5 main steps in each iteration of the Self-Rewarding loop.
 
 0) [00_sft.py](scripts/00_sft.py) - Supervised Fine-Tuning (SFT) of a base model to give it instruction following and evaluation skills.
 1) [01_gen_prompts.py](scripts/01_gen_prompts.py) - Generate new prompts to add to the training set.
-2) [02_gen_prompts.py](scripts/02_gen_responses.py) - Generate N Responses per prompt, so that we can create preference pairs.
+2) [02_gen_responses.py](scripts/02_gen_responses.py) - Generate N Responses per prompt, so that we can create preference pairs.
 3) [03_gen_scores.py](scripts/03_gen_scores.py) - Score each response from 1-5 for how well it answered the prompt.
 4) [04_gen_preferences.py](scripts/04_gen_preferences.py) - Generate preference pairs given the scores to create a DPO dataset
 5) [05_dpo.py](scripts/05_dpo.py) - Run Direct Preference Optimization (DPO) to train the next iteration of the model
