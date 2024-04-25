@@ -1,6 +1,6 @@
 # 🐂 Oxen.ai Self-Rewarding Language Models 🔁
 
-This is work done by the [Oxen.ai Community](https://oxen.ai/community), trying to reproduce the [Self-Rewarding Language Model paper](https://arxiv.org/abs/2401.10020) from MetaAI.
+This is work done by the [Oxen.ai Community](https://oxen.ai/community), trying to reproduce the [Self-Rewarding Language Model paper](https://arxiv.org/abs/2401.10020) from MetaAI. Thanks to [@raulc0399](https://github.com/raulc0399) for putting in all the original effort reproducing. Check out his repository [here](https://github.com/raulc0399/self-rewarding-language-models).
 
 Every Friday we get together for a paper club called [Arxiv Dives](https://www.oxen.ai/community/arxiv-dives) where we read interesting research papers. We thought the Self-Rewarding Language Models paper felt very approachable and reproducible, so we spent some time implementing it.
 
