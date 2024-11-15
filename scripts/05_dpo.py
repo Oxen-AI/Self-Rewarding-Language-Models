@@ -53,6 +53,14 @@ base_model.config.use_cache = False
 # )
 
 tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
+tokenizer.chat_template = """<|begin_of_text|>
+{%- for message in messages %}
+{{- '<|start_header_id|>' + message['role'] + '<|end_header_id|>\n\n' }}
+{{- message['content'] + '<|eot_id|>' }}
+{%- endfor %}
+{{- '<|start_header_id|>assistant<|end_header_id|>\n\n' }}
+"""
+tokenizer.eos_token = "<|eot_id|>"
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
@@ -77,9 +85,9 @@ dataset = dataset.map(get_prompt)
 lora_dropout=0.05
 lora_alpha=16
 lora_r=16
-learning_rate=5e-5
+learning_rate=5e-4
 
-batch_size = 4
+batch_size = 2
 
 def create_peft_config(model):
     peft_config = LoraConfig(
