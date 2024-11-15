@@ -8,7 +8,7 @@ from peft import (
     TaskType,
     prepare_model_for_kbit_training,
 )
-from trl import DPOTrainer
+from trl import DPOConfig, DPOTrainer
 
 import sys, os
 
@@ -26,17 +26,17 @@ output_dir = sys.argv[4]
 dataset = load_dataset("json", data_files={'train': dataset_file})
 dataset = dataset['train'].shuffle(seed=42)
 
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16,
-)
+# bnb_config = BitsAndBytesConfig(
+#     load_in_4bit=True,
+#     bnb_4bit_quant_type="nf4",
+#     bnb_4bit_compute_dtype=torch.float16,
+# )
 
 device_map = "auto"
 
 base_model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    quantization_config=bnb_config,
+    # quantization_config=bnb_config,
     device_map=device_map,
     trust_remote_code=True,
 )
@@ -92,7 +92,7 @@ def create_peft_config(model):
         target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj"]
     )
 
-    model = prepare_model_for_kbit_training(model)
+    # model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, peft_config)
 
     model.print_trainable_parameters()
@@ -101,31 +101,48 @@ def create_peft_config(model):
 
 model, lora_config = create_peft_config(base_model)
 
-training_args = TrainingArguments(
+# training_args = TrainingArguments(
+#     output_dir=output_dir,
+#     per_device_train_batch_size=batch_size,
+#     learning_rate=learning_rate,
+
+#     gradient_accumulation_steps=4,
+#     gradient_checkpointing=True,
+#     warmup_steps=50,
+#     logging_steps=1,
+#     num_train_epochs=1,
+#     save_steps=50,
+#     lr_scheduler_type="cosine",
+#     optim="paged_adamw_32bit",
+# )
+
+# trainer = DPOTrainer(
+#     base_model,
+#     ref_model=None,
+#     args=training_args,
+#     train_dataset=dataset,
+#     tokenizer=tokenizer,
+#     peft_config=lora_config,
+#     beta=0.1,
+#     max_prompt_length=1024,
+#     max_length=1536,
+# )
+
+training_args = DPOConfig(
     output_dir=output_dir,
+    logging_steps=1,
     per_device_train_batch_size=batch_size,
     learning_rate=learning_rate,
-
     gradient_accumulation_steps=4,
     gradient_checkpointing=True,
     warmup_steps=50,
-    logging_steps=1,
-    num_train_epochs=1,
-    save_steps=50,
-    lr_scheduler_type="cosine",
-    optim="paged_adamw_32bit",
 )
-
 trainer = DPOTrainer(
-    base_model,
-    ref_model=None,
+    model=model,
     args=training_args,
-    train_dataset=dataset,
-    tokenizer=tokenizer,
+    processing_class=tokenizer,
     peft_config=lora_config,
-    beta=0.1,
-    max_prompt_length=1024,
-    max_length=1536,
+    train_dataset=dataset
 )
 
 trainer.train()
