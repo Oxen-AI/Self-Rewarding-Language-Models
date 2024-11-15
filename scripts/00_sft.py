@@ -11,7 +11,7 @@ def collate_fn(tokenizer, x):
     text = tokenizer.apply_chat_template([
         {"role": "system", "content": "Respond to the following user query in a comprehensive and detailed way. But first write down your internal thoughts. This must include your draft response and its evaluation. After this, write your final response after \"<R>\"."},
         {"role": "user", "content": x['prompt']},
-        {"role": "assistant", "content": x['chosen']},
+        {"role": "assistant", "content": x['response']},
     ], tokenize=False)
     return {"text": text}
 
