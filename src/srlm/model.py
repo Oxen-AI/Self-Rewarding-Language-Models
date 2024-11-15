@@ -20,6 +20,13 @@ def load_model(tokenizer_name, model_name):
     bnb_config = get_bnb_config()
 
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, trust_remote_code=True)
+    tokenizer.chat_template = """<|begin_of_text|>
+{%- for message in messages %}
+{{- '<|start_header_id|>' + message['role'] + '<|end_header_id|>\n\n' }}
+{{- message['content'] + '<|eot_id|>' }}
+{%- endfor %}
+{{- '<|start_header_id|>assistant<|end_header_id|>\n\n' }}"""
+    tokenizer.eos_token = "<|eot_id|>"
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
 

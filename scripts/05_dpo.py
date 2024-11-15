@@ -1,6 +1,6 @@
 
 from datasets import load_dataset
-import torch
+import time
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig, AutoTokenizer, TrainingArguments
 from peft import (
     get_peft_model,
@@ -79,6 +79,9 @@ def get_prompt(example):
 
     return example
 
+# filter out examples that do not have the required keys or are empty
+dataset = dataset.filter(lambda x: 'prompt' in x and 'chosen' in x and 'rejected' in x and x['prompt'] and x['chosen'] and x['rejected'])
+
 dataset = dataset.map(get_prompt)
 
 # from https://github.com/mlabonne/llm-course/blob/main/Fine_tune_a_Mistral_7b_model_with_DPO.ipynb
@@ -87,7 +90,7 @@ lora_alpha=16
 lora_r=16
 learning_rate=5e-4
 
-batch_size = 2
+batch_size = 1
 
 def create_peft_config(model):
     peft_config = LoraConfig(
@@ -144,6 +147,7 @@ training_args = DPOConfig(
     gradient_accumulation_steps=4,
     gradient_checkpointing=True,
     warmup_steps=50,
+    max_length=2048,
 )
 trainer = DPOTrainer(
     model=model,
@@ -153,7 +157,11 @@ trainer = DPOTrainer(
     train_dataset=dataset
 )
 
+# Time the training
+start_time = time.time()
 trainer.train()
+end_time = time.time()
+print(f"Training time: {end_time - start_time} seconds")
 
 # todo: during training getting these warning:
 

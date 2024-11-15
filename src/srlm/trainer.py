@@ -17,7 +17,7 @@ class Trainer:
         # from https://www.datacamp.com/tutorial/mistral-7b-tutorial
         learning_rate=2e-4
         batch_size = 4
-        max_seq_length = 1024
+        max_seq_length = 2048
 
         training_args = TrainingArguments(
             output_dir=self.output,

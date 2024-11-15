@@ -42,11 +42,12 @@ def load_fined_tuned(model_name):
 {{- '<|start_header_id|>assistant<|end_header_id|>\n\n' }}
 """
     tokenizer.eos_token = "<|eot_id|>"
+    model.generation_config.eos_token_id = tokenizer.eos_token_id
 
     return model, tokenizer
 
 def do_sample(model, tokenizer, prompt):
-    print(f"Got prompt: {prompt}")
+    # print(f"Got prompt: {prompt}")
     with torch.no_grad():
         prompt_sample = [
             {"role": "system", "content": "You are a helpful assistant."},
@@ -54,10 +55,10 @@ def do_sample(model, tokenizer, prompt):
         ]
 
         prompt_for_model = tokenizer.apply_chat_template(prompt_sample, tokenize=False)
-        print(f"Prompt for model: `{prompt_for_model}`")
-        print("--------------------------------")
+        # print(f"Prompt for model: `{prompt_for_model}`")
+        # print("--------------------------------")
         model_inputs = tokenizer(prompt_for_model, return_tensors="pt").to("cuda")
-        streamer = TextStreamer(tokenizer)
+        streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
 
         # Self Instruction Creation
         #  For candidate response generation we sample N = 4 candidate responses with temperature T = 0.7, p = 0.9.
@@ -65,6 +66,7 @@ def do_sample(model, tokenizer, prompt):
             **model_inputs,
             do_sample=True,
             pad_token_id=tokenizer.eos_token_id,
+            eos_token_id=tokenizer.eos_token_id,
             num_return_sequences=1,
             streamer=streamer,
             temperature=0.7,
@@ -78,8 +80,10 @@ def do_sample(model, tokenizer, prompt):
 
         return answer
 
-print(f"Model: {model_name}")
+print(f"🧠 Loading the thinking machine...")
 model, tokenizer = load_fined_tuned(model_name)
-answer = do_sample(model, tokenizer, prompt)
-print("="*80)
-print(answer)
+do_sample(model, tokenizer, prompt)
+
+while True:
+    prompt = input("> ")
+    do_sample(model, tokenizer, prompt)

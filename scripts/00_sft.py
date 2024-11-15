@@ -1,6 +1,7 @@
 
 import argparse
 import os
+import time
 from srlm.trainer import Trainer
 from srlm.model import load_model, create_peft_model
 
@@ -10,7 +11,7 @@ def collate_fn(tokenizer, x):
     text = tokenizer.apply_chat_template([
         # {"role": "system", "content": "You are a safe, competent, and confident AI."},
         {"role": "user", "content": x['prompt']},
-        {"role": "assistant", "content": x['completion']},
+        {"role": "assistant", "content": x['chosen']},
     ], tokenize=False)
     return {"text": text}
 
@@ -37,9 +38,14 @@ def main():
     print("First example in the dataset")
     print(dataset['text'][0])
 
+    # Time the training
+    start_time = time.time()
+
     model, lora_config = create_peft_model(model)
     trainer = Trainer(args.output)
     trainer.train(model, tokenizer, lora_config, dataset)
+    end_time = time.time()
+    print(f"Training time: {end_time - start_time} seconds")
 
 if __name__ == "__main__":
     main()
