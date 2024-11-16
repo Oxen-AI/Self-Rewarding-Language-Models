@@ -66,6 +66,7 @@ tokenizer.padding_side = "right"
 
 def get_prompt(example):
     prompt_sample = [
+        {"role": "system", "content": "Respond to the following user query in a comprehensive and detailed way. But first write down your internal thoughts. This must include your draft response and its evaluation. After this, write your final response after \"<R>\"."},
         {"role": "user", "content": example['prompt']}
     ]
 
@@ -81,7 +82,6 @@ def get_prompt(example):
 
 # filter out examples that do not have the required keys or are empty
 dataset = dataset.filter(lambda x: 'prompt' in x and 'chosen' in x and 'rejected' in x and x['prompt'] and x['chosen'] and x['rejected'])
-
 dataset = dataset.map(get_prompt)
 
 # from https://github.com/mlabonne/llm-course/blob/main/Fine_tune_a_Mistral_7b_model_with_DPO.ipynb
@@ -112,33 +112,6 @@ def create_peft_config(model):
 
 model, lora_config = create_peft_config(base_model)
 
-# training_args = TrainingArguments(
-#     output_dir=output_dir,
-#     per_device_train_batch_size=batch_size,
-#     learning_rate=learning_rate,
-
-#     gradient_accumulation_steps=4,
-#     gradient_checkpointing=True,
-#     warmup_steps=50,
-#     logging_steps=1,
-#     num_train_epochs=1,
-#     save_steps=50,
-#     lr_scheduler_type="cosine",
-#     optim="paged_adamw_32bit",
-# )
-
-# trainer = DPOTrainer(
-#     base_model,
-#     ref_model=None,
-#     args=training_args,
-#     train_dataset=dataset,
-#     tokenizer=tokenizer,
-#     peft_config=lora_config,
-#     beta=0.1,
-#     max_prompt_length=1024,
-#     max_length=1536,
-# )
-
 training_args = DPOConfig(
     output_dir=output_dir,
     logging_steps=1,
@@ -162,14 +135,6 @@ start_time = time.time()
 trainer.train()
 end_time = time.time()
 print(f"Training time: {end_time - start_time} seconds")
-
-# todo: during training getting these warning:
-
-# i guess this is on the base model, need to check. in that case this is fine
-# UserWarning: None of the inputs have requires_grad=True. Gradients will be None
-
-# seems that this can be ignored:
-# Could not estimate the number of tokens of the input, floating-point operations will not be computed
 
 output_dir = os.path.join(output_dir, "final_checkpoint")
 trainer.model.save_pretrained(output_dir)

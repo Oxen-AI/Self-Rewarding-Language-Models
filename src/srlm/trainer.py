@@ -14,7 +14,6 @@ class Trainer:
             lora_config,
             dataset
     ):
-        # from https://www.datacamp.com/tutorial/mistral-7b-tutorial
         learning_rate=2e-4
         batch_size = 1
         max_seq_length = 4096
